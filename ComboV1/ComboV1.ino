@@ -651,58 +651,7 @@ void walkCycleSideBackwards(int FrontLeg, int FrontHip, int RearLeg, int RearHip
   }
   
 }
-void walkCycleSideBackwards(int FrontLeg, int FrontHip, int RearLeg, int RearHip){
-  //To walk you must first...
-  
-  int temp=lastPWML;
 
-  //retract FL and RR legs for movement
-  for (uint16_t pulselen = LegMid; pulselen < LegMin; pulselen+=4) {
-    pwm.setPWM(FrontLeg, 0, pulselen); delay(5);
-    pwm.setPWM(RearLeg, 0, pulselen); delay(5);
-  }
-  //should now be "standing" on Front Right and Rear Left legs 
-  
-  //bring the front left and rear right hip joints backwards to prepare for movement
-  for (uint16_t pulselen = HipMid; pulselen < HipMax; pulselen+=4) {
-    pwm.setPWM(FrontHip, 0, pulselen); delay(5);
-    pwm.setPWM(RearHip, 0, pulselen); delay(5);
-  }
-
-  //turn the front left and rear right hip joints forwards
-  //while also extending the legs ot make ground contact
-  uint16_t pulseLeg=LegMin;
-  for (uint16_t pulselen = HipMax; pulselen > HipMin; pulselen-=4) {
-    pwm.setPWM(FrontLeg, 0, pulseLeg); delay(5);
-    pwm.setPWM(RearLeg, 0, pulseLeg); delay(5);
-    pwm.setPWM(FrontHip, 0, pulselen); delay(5);
-    pwm.setPWM(RearHip, 0, pulselen); delay(5);
-    pulseLeg+=2;
-    temp=pulseLeg;
-  }
-  //initially pulseLeg+=.57 to equate for the difference of
-  //moving simultaneously 175 units and 100 units, but changed to
-  //0.44 to prevent FULL extension of the leg and only approx 75% extension
-
-  //retract legs
-  for (uint16_t pulselen = temp; pulselen > LegMin; pulselen-=4) {
-    pwm.setPWM(FrontLeg, 0, pulselen); delay(5);
-    pwm.setPWM(RearLeg, 0, pulselen); delay(5);
-  }
-
-  //reset hips to Middle
-  for (uint16_t pulselen = HipMin; pulselen < HipMid; pulselen+=4) {
-    pwm.setPWM(FrontHip, 0, pulselen); delay(5);
-    pwm.setPWM(RearHip, 0, pulselen); delay(5);
-  }
-
-  //extend legs
-  for (uint16_t pulselen=LegMin; pulselen < LegMid; pulselen++) {
-    pwm.setPWM(FrontLeg, 0, pulselen); delay(5);
-    pwm.setPWM(RearLeg, 0, pulselen); delay(5);
-  }
-  
-}
 void walkBackwards(){
   //move one side then the other side
   walkCycleSideBackwards(FrontLeftLeg, FrontLeftHip, RearRightLeg, RearRightHip, false);
