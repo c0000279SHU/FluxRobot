@@ -363,7 +363,9 @@ void loop() {
     midLegs();
   }
 
-  doGPS();
+  if(!ThermalOutput){
+    doGPS();
+  }
 
   //*
   Serial.print("RJoyX: ");
@@ -559,7 +561,7 @@ void sit(){
     centerHips();
     delay(100); 
   }
-  for (uint16_t pulselen = lastPWML; pulselen < LegMin; pulselen++) {
+  for (uint16_t pulselen = lastPWML; pulselen > LegMin; pulselen--) {
     pwm.setPWM(FrontRightLeg, 0, pulselen); delay(5);
     pwm.setPWM(FrontLeftLeg, 0, pulselen); delay(5);
     pwm.setPWM(RearRightLeg, 0, pulselen); delay(5);
